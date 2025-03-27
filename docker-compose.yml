@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: lifeboard_db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: lifeboard
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: lifeboarddb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
