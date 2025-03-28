@@ -21,7 +21,25 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "LifeBoard API funcionando!")
 	})
-	http.HandleFunc("/games", games.GetGames)
+	http.HandleFunc("/games", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodPost {
+			games.StoreGame(w, r)
+		} else if r.Method == http.MethodGet {
+			games.GetGames(w, r)
+		} else {
+			http.Error(w, "Método não suportado", http.StatusMethodNotAllowed)
+		}
+	})
+
+	http.HandleFunc("/games/", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodPut {
+			games.UpdateGame(w, r)
+		} else if r.Method == http.MethodDelete {
+			games.DeleteGame(w, r)
+		} else {
+			http.Error(w, "Método não suportado", http.StatusMethodNotAllowed)
+		}
+	})
 
 	http.ListenAndServe(":8080", nil)
 }
